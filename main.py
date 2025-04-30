@@ -42,12 +42,10 @@ class GoalRequest(BaseModel):
 
 @app.post("/simulate")
 def simulate_goal(request: GoalRequest) -> Dict[str, Any]:
-    print("Hi")
     try:
         start_date = datetime.strptime(request.start_date, "%m-%Y")
     except ValueError:
         return {"error": "Invalid date format. Use 'mm-YYYY'."}
-    print("começo")
     months = request.time if request.time_unit == "months" else request.time * 12
     monthly_rate = (Decimal(1) + request.return_rate) ** (Decimal(1)/Decimal(12)) - Decimal(1)
 
@@ -58,7 +56,6 @@ def simulate_goal(request: GoalRequest) -> Dict[str, Any]:
     current_monthly_investment = request.monthly_investment
     monthly_inflation = (Decimal(1) + request.inflation_rate) ** (Decimal(1)/Decimal(12)) - Decimal(1)
     adjusted_goal = request.goal
-    print("oi")
 
     for i in range(months):
         date = start_date + relativedelta(months=i)
