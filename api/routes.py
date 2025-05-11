@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict, Any
 from decimal import Decimal
 from application.services import simulate_goal
+from domain.exceptions  import InvalidInputError
 
 router = APIRouter()
 
@@ -21,5 +22,11 @@ class GoalRequest(BaseModel):
 
 @router.post("/simulate")
 def simulate(request: GoalRequest) -> Dict[str, Any]:
-    results = simulate_goal(request)
-    return {"data": results}
+    try:
+        results = simulate_goal(request)
+        return {"data": results}
+    except InvalidInputError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
