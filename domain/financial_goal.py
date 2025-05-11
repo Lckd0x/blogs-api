@@ -6,7 +6,7 @@ from  domain.exceptions  import InvalidInputError
 class FinancialGoal:
     def __init__(self, goal: Decimal, start_date: str, inflation_rate: Decimal = Decimal("0.00")):
         if goal <= 0:
-            raise InvalidInputError("Goal amount must be greater than zero.")
+            raise InvalidInputError("Meta deve ser maior que zero.")
         try:
             self.start_date = datetime.strptime(start_date, "%m-%Y")
         except ValueError:
